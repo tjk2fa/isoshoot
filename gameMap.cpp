@@ -29,6 +29,5 @@ gameMap::gameMap(std::string filename){
     }
     file.close();
 
-
 }
 

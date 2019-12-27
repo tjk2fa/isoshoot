@@ -36,7 +36,7 @@ int main()
     epicTexture.loadFromFile("walls.png", sf::IntRect(0,0,49,114));
     sf::Texture epicTexture2;
     epicTexture2.loadFromFile("walls.png", sf::IntRect(49,0,49,114));
-
+    /*
     sf::Sprite wall1;
     wall1.setTexture(coolTexture);
     sf::Sprite wall2;
@@ -68,6 +68,17 @@ int main()
     wall5.setPosition(WorldToScreen(sf::Vector2f(19*4,0)));
     wall6.setPosition(WorldToScreen(sf::Vector2f(19*5,0)));
     wall7.setPosition(WorldToScreen(sf::Vector2f(19*6,0)));
+    */
+    sf::VertexArray shit = sf::VertexArray(sf::Quads, 4);
+    shit[0].position = sf::Vector2f(0.f, 0.f);
+    shit[1].position = sf::Vector2f(74.f, 0.f);
+    shit[2].position = sf::Vector2f(74.f, 37.f);
+    shit[3].position = sf::Vector2f(0.f, 37.f);
+    shit[0].texCoords = sf::Vector2f(0.f, 0.f);
+    shit[1].texCoords = sf::Vector2f(74.f, 0.f);
+    shit[2].texCoords = sf::Vector2f(74.f, 37.f);
+    shit[3].texCoords = sf::Vector2f(0.f, 37.f);
+
 
     // run the program as long as the window is open
 
@@ -87,7 +98,7 @@ int main()
 
         // draw everything here...
         // window.draw(...);
-
+        /*
         window.draw(wall1);
         window.draw(wall2);
         window.draw(wall3);
@@ -98,7 +109,8 @@ int main()
         window.draw(actualWall2);
 
         window.draw(actualWall1);
-
+        */
+        window.draw(shit, &coolTexture);
         // end the current frame
         window.display();
 

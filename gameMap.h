@@ -16,7 +16,9 @@ class gameMap {
 
 
     struct mapTile {
+        //depends on your sprites, good luck figuring this out lmao
         const int cellSize = 19;
+
         bool hasNorthWall;
         bool hasSouthWall;
         bool hasEastWall;
@@ -39,11 +41,22 @@ class gameMap {
 
 
 public:
+    /*reads in a map file consisting of a rectangle of ones, twos, and zeroes
+     * 0 = empty tile
+     * 1 = wall
+     * 2 = free space
+     *
+     * */
     gameMap(std::string filename);
     //~gameMap();
 };
 
+void generateMap();
+
+void getTile(int x, int y);
+
 void renderMap(sf::RenderWindow* window);
+
 
 
 

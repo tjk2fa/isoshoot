@@ -6,3 +6,4 @@ How to build this game:
     2. Change the "target_link_libraries" commands to reflect the location of the SFML library files
 4. Run CMake, choosing "cmake_build_debug" for "where to build the binaries" and the root folder of the repo for "where is the source code"
 5. Generate a makefile with cmake, then run make to build the final binary
+
