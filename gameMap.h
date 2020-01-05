@@ -12,50 +12,57 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+
+
 class gameMap {
-
-
+    private:
     struct mapTile {
-        //depends on your sprites, good luck figuring this out lmao
-        const int cellSize = 19;
-
+        bool isEmpty;
         bool hasNorthWall;
         bool hasSouthWall;
         bool hasEastWall;
         bool hasWestWall;
-        int worldX;
-        int worldY;
-        /*mapTile(bool n, bool s, bool e, bool w, int x, int y){
-            hasNorthWall = n;
-            hasSouthWall = s;
-            hasEastWall = e;
-            hasWestWall = w;
-            worldX = x;
-            worldY = y;
-        }*/
         mapTile()= default;
-
     };
+    const int cellSize = 19;
 
-    mapTile** tilez;
+    mapTile* mapTiles;
+    int cols; //x size of world
+    int rows; //y size of world
+
+    //tilez is a 2d grid stored as a 1d array for speed, use this function to get a certain index
+    size_t index( int x, int y ) const { return x + cols*y; }
+
+    sf::VertexArray floorVerticies;
+    sf::VertexArray westWallVerticies;
+    sf::VertexArray southWallVerticies;
+    sf::VertexArray eastWallVerticies;
+    sf::VertexArray northWallVerticies;
+
+    static void emptyTile(mapTile &m){
+        m.isEmpty = true;
+        m.hasWestWall = false;
+        m.hasEastWall = false;
+        m.hasSouthWall = false;
+        m.hasNorthWall = false;
+    }
 
 
-public:
     /*reads in a map file consisting of a rectangle of ones, twos, and zeroes
      * 0 = empty tile
      * 1 = wall
      * 2 = free space
      *
      * */
+    public:
     gameMap(std::string filename);
     //~gameMap();
+    void generateMap();
+    void getTile(int x, int y);
+    void renderMap(sf::RenderWindow* window);
+
 };
 
-void generateMap();
-
-void getTile(int x, int y);
-
-void renderMap(sf::RenderWindow* window);
 
 
 
