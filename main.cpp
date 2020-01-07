@@ -17,26 +17,39 @@
  *
  */
 
-sf::Vector2f WorldToScreen(sf::Vector2f v)
+/*sf::Vector2f WorldToScreen(sf::Vector2f v)
 {
     return {2.0f*v.x - 2.0f*v.y, v.x + v.y};
 }
-
-
+sf::Vector2f adjustVec(float x, float y, sf::Vector2f z){
+    z.x+=x;
+    z.y+=y;
+    return z;
+}
+*/
 
 int main()
 {
-    gameMap map("map.txt");
+
 
     // create the window
     sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
-    sf::Texture coolTexture;
-    coolTexture.loadFromFile("tiles.png", sf::IntRect(0,0,74,37));
+    window.setVerticalSyncEnabled(true);
+    sf::Texture floorTexture;
+    sf::Texture northWallTexture;
+    sf::Texture southWallTexture;
+    sf::Texture eastWallTexture;
+    sf::Texture westWallTexture;
+    floorTexture.loadFromFile("floors.png", sf::IntRect(0,40,75,39));
+    sf::Texture textures[5];
+    textures[0] = floorTexture;
+    gameMap map("map.txt", textures);
+    map.loadVerticies();
+    /*
     sf::Texture epicTexture;
     epicTexture.loadFromFile("walls.png", sf::IntRect(0,0,49,114));
     sf::Texture epicTexture2;
     epicTexture2.loadFromFile("walls.png", sf::IntRect(49,0,49,114));
-    /*
     sf::Sprite wall1;
     wall1.setTexture(coolTexture);
     sf::Sprite wall2;
@@ -69,8 +82,8 @@ int main()
     wall6.setPosition(WorldToScreen(sf::Vector2f(19*5,0)));
     wall7.setPosition(WorldToScreen(sf::Vector2f(19*6,0)));
     */
-    sf::VertexArray shit = sf::VertexArray(sf::Quads, 4);
-    shit[0].position = sf::Vector2f(0.f, 0.f);
+    sf::VertexArray shit = sf::VertexArray(sf::Quads, 8);
+   /* shit[0].position = sf::Vector2f(0.f, 0.f);
     shit[1].position = sf::Vector2f(74.f, 0.f);
     shit[2].position = sf::Vector2f(74.f, 37.f);
     shit[3].position = sf::Vector2f(0.f, 37.f);
@@ -78,7 +91,47 @@ int main()
     shit[1].texCoords = sf::Vector2f(74.f, 0.f);
     shit[2].texCoords = sf::Vector2f(74.f, 37.f);
     shit[3].texCoords = sf::Vector2f(0.f, 37.f);
+*/
+    sf::Vector2f tile1Root = WorldToScreen(sf::Vector2f(0.f, 0.f));
+    sf::Vector2f tile2Root = WorldToScreen(sf::Vector2f(19, 0.f));
 
+    sf::Vector2f jef = sf::Vector2f(0,0);
+
+
+    /*
+    shit[0].position = adjustVec(0,0,tile1Root);
+    shit[1].position = adjustVec(75,0,tile1Root);
+    shit[2].position = adjustVec(75,39,tile1Root);
+    shit[3].position = adjustVec(0,39,tile1Root);
+    shit[0].texCoords = sf::Vector2f(0.f, 0.f);
+    shit[1].texCoords = sf::Vector2f(75.f, 0.f);
+    shit[2].texCoords = sf::Vector2f(75.f, 39.f);
+    shit[3].texCoords = sf::Vector2f(0.f, 39.f);
+    shit[4].position = adjustVec(0,0,tile2Root);
+    shit[5].position = adjustVec(75,0,tile2Root);
+    shit[6].position = adjustVec(75,39,tile2Root);
+    shit[7].position = adjustVec(0,39,tile2Root);
+    shit[4].texCoords = sf::Vector2f(0.f, 0.f);
+    shit[5].texCoords = sf::Vector2f(75.f, 0.f);
+    shit[6].texCoords = sf::Vector2f(75.f, 39.f);
+    shit[7].texCoords = sf::Vector2f(0.f, 39.f);
+
+    map.addElementToVertexArray(shit, sf::Vector2f(19*3, 19*3), coolTexture);
+    map.addElementToVertexArray(shit, sf::Vector2f(19*4, 19*4), coolTexture);
+    map.addElementToVertexArray(shit, sf::Vector2f(19*5, 19*5), coolTexture);
+    map.addElementToVertexArray(shit, sf::Vector2f(19*6, 19*6), coolTexture);
+    */
+/*    sf::Vector2f secondTile = WorldToScreen(sf::Vector2f(19,19));
+    shit[4].position = WorldToScreen(sf::Vector2f(19,19));
+    shit[5].position = WorldToScreen(sf::Vector2f(19+18,19));
+    shit[6].position = WorldToScreen(sf::Vector2f(19+18,19+18));
+    shit[7].position = WorldToScreen(sf::Vector2f(19,19+18));
+
+    shit[4].texCoords = sf::Vector2f(0.f, 0.f);
+    shit[5].texCoords = sf::Vector2f(74.f, 0.f);
+    shit[6].texCoords = sf::Vector2f(74.f, 37.f);
+    shit[7].texCoords = sf::Vector2f(0.f, 37.f);
+    */
 
     // run the program as long as the window is open
 
@@ -98,18 +151,18 @@ int main()
 
         // draw everything here...
         // window.draw(...);
-        /*
-        window.draw(wall1);
-        window.draw(wall2);
-        window.draw(wall3);
+        map.renderMap(&window);
+        //window.draw(wall1);
+        //window.draw(wall2);
+        //window.draw(wall3);
         //window.draw(wall4);
         //window.draw(wall5);
         //window.draw(wall6);
         //window.draw(wall7);
-        window.draw(actualWall2);
+        //window.draw(actualWall2);
 
-        window.draw(actualWall1);
-        */
+        //window.draw(actualWall1);
+
         window.draw(shit, &coolTexture);
         // end the current frame
         window.display();
