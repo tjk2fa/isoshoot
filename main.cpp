@@ -33,25 +33,52 @@ int main()
 
 
     // create the window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
-    window.setVerticalSyncEnabled(true);
+    sf::RenderWindow window(sf::VideoMode(1000, 1000), "My window");
+    window.setFramerateLimit(60);
     sf::Texture floorTexture;
     sf::Texture northWallTexture;
     sf::Texture southWallTexture;
     sf::Texture eastWallTexture;
     sf::Texture westWallTexture;
     floorTexture.loadFromFile("floors.png", sf::IntRect(0,40,75,39));
+    westWallTexture.loadFromFile("walls.png", sf::IntRect(0, 0, 49,114));
+    southWallTexture.loadFromFile("walls.png", sf::IntRect(50, 0, 49,114));
+    northWallTexture.loadFromFile("walls.png", sf::IntRect(100, 0, 49,114));
+    eastWallTexture.loadFromFile("walls.png", sf::IntRect(150, 0, 49,114));
+
     sf::Texture textures[5];
     textures[0] = floorTexture;
+    textures[1] = northWallTexture;
+    textures[2] = southWallTexture;
+    textures[3] = eastWallTexture;
+    textures[4] = westWallTexture;
+
     gameMap map("map.txt", textures);
     map.loadVerticies();
-    /*
+
     sf::Texture epicTexture;
     epicTexture.loadFromFile("walls.png", sf::IntRect(0,0,49,114));
     sf::Texture epicTexture2;
     epicTexture2.loadFromFile("walls.png", sf::IntRect(49,0,49,114));
-    sf::Sprite wall1;
-    wall1.setTexture(coolTexture);
+
+    sf::Sprite test;
+    sf::Sprite test2;
+    test.setTexture(floorTexture);
+    test2.setTexture(floorTexture);
+    test.setPosition(WorldToScreen(sf::Vector2f(0,0)));
+    test2.setPosition(WorldToScreen(sf::Vector2f(19,0)));
+
+
+    sf::Sprite wallTest;
+    wallTest.setTexture(eastWallTexture);
+    wallTest.setPosition(WorldToScreen(sf::Vector2f(19.0/3.0, -19.0/3.0)));
+    wallTest.move(sf::Vector2f(0,-90));
+
+    //north wall needs an adjustment of y:-90
+    //west wall needs to go y:-90 and then world space x:19/3 and y:19/3
+    //east needs y:-90 and world x:19/3 y:-19/3
+    //south needs y:-90 and world x:2*19/3
+    /*
     sf::Sprite wall2;
     wall2.setTexture(coolTexture);
     sf::Sprite wall3;
@@ -146,13 +173,15 @@ int main()
                 window.close();
         }
 
-        // clear the window with black color
+        // clear the window with yellow color
         window.clear(sf::Color::Yellow);
 
         // draw everything here...
         // window.draw(...);
         map.renderMap(&window);
-        //window.draw(wall1);
+        //window.draw(test);
+        //window.draw(test2);
+        //window.draw(wallTest);
         //window.draw(wall2);
         //window.draw(wall3);
         //window.draw(wall4);
@@ -163,7 +192,7 @@ int main()
 
         //window.draw(actualWall1);
 
-        window.draw(shit, &coolTexture);
+        window.draw(shit, &floorTexture);
         // end the current frame
         window.display();
 

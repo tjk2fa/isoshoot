@@ -15,15 +15,14 @@
 
 
 class gameMap {
+
+
     private:
     struct mapTile {
-        bool isEmpty;
-        bool hasNorthWall;
-        bool hasSouthWall;
-        bool hasEastWall;
-        bool hasWestWall;
+        std::vector<Entity> entities;
         mapTile()= default;
     };
+
 
     /*This is the dimension of one square in world space.
      * Passing multiples of this value to WorldToScreen
@@ -42,17 +41,8 @@ class gameMap {
     size_t index( int x, int y ) const { return x + cols*y; }
 
     sf::VertexArray floorVerticies;
-    sf::VertexArray westWallVerticies;
-    sf::VertexArray southWallVerticies;
-    sf::VertexArray eastWallVerticies;
-    sf::VertexArray northWallVerticies;
-
-    sf::Texture floorText;
-    sf::Texture westWallText;
-    sf::Texture southWallText;
-    sf::Texture eastWallText;
-    sf::Texture northWallText;
-
+    sf::VertexArray otherVerticies;
+    sf::Texture spriteSheet;
 
 
 
@@ -71,7 +61,7 @@ class gameMap {
      *
      * */
     public:
-    void addElementToVertexArray(sf::VertexArray &v, sf::Vector2f worldCoords, sf::Texture);
+    void addElementToVertexArray(sf::VertexArray &v, sf::Vector2f worldCoords, sf::Texture, float zHeight);
 
     gameMap(std::string filename, sf::Texture textures[5]);
     //~gameMap();

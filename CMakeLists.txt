@@ -3,7 +3,7 @@ project(game)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(game main.cpp Game.cpp Game.h gameMap.cpp gameMap.h)
+add_executable(game main.cpp Game.cpp Game.h gameMap.cpp gameMap.h Entity.cpp Entity.h Entity.cpp Entity.h)
 
 include_directories("/opt/local/include")
 
