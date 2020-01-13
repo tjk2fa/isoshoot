@@ -2,6 +2,7 @@
 // Created by Tom on 1/8/20.
 //
 
+#include <iostream>
 #include "Entity.h"
 Entity::Entity(int x, int y){
     worldX = x;
@@ -10,20 +11,26 @@ Entity::Entity(int x, int y){
 
 Wall::Wall(direction d, int x, int y) : Entity(x, y){
     dir = d;
-    switch(d){
-        case north:
-            texCoords.left = 0;
-            texCoords.top = 0;
-        case south:
-            texCoords.left = 0;
-            texCoords.top = 0;
-        case east:
-            texCoords.left = 0;
-            texCoords.top = 0;
-        case west:
-            texCoords.left = 0;
-            texCoords.top = 0;
+    this->texCoords = sf::IntRect();
+    if(d==north) {
+        texCoords.left = (75 + 2 * wallSpriteWidth);
+        texCoords.top = 0;
     }
+    else if(d==south) {
+        texCoords.left = (75 + wallSpriteWidth);
+        texCoords.top = 0;
+    }
+     else if(d==east){
+         texCoords.left = (75+3*wallSpriteWidth);
+         texCoords.top = 0;
+    }
+      else if(d==west) {
+        texCoords.left = 75;
+        texCoords.top = 0;
+    }
+
+
+
     texCoords.width = wallSpriteWidth;
     texCoords.height = wallSpriteHeight;
     zHeight = 90;

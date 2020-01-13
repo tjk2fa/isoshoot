@@ -23,7 +23,7 @@ class gameMap {
         bool empty;
         mapTile(){
             entities = std::vector<Entity>();
-            bool empty = false;
+            empty = false;
         }
     };
 
@@ -44,6 +44,7 @@ class gameMap {
     //tilez is a 2d grid stored as a 1d array for speed, use this function to get a certain index
     size_t index( int x, int y ) const { return x + cols*y; }
 
+    sf::VertexArray floorVerticies;
     sf::VertexArray verticies;
     sf::Texture spriteSheet;
 
@@ -61,11 +62,11 @@ class gameMap {
     void loadEntityToVertexArray(sf::VertexArray &v, Entity e);
 
     gameMap(std::string filename, sf::Texture sheet);
-    //~gameMap();
+    ~gameMap();
     void generateMap();
     void getTile(int x, int y);
     void renderMap(sf::RenderWindow* window);
-    void loadVerticies();
+    void loadEntVerticies();
 
 
 };

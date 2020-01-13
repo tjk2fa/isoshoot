@@ -34,33 +34,17 @@ int main()
     // create the window
     sf::RenderWindow window(sf::VideoMode(1000, 1000), "My window");
     window.setFramerateLimit(60);
-    sf::Texture floorTexture;
-    sf::Texture northWallTexture;
-    sf::Texture southWallTexture;
-    sf::Texture eastWallTexture;
-    sf::Texture westWallTexture;
-    floorTexture.loadFromFile("floors.png", sf::IntRect(0,40,75,39));
-    westWallTexture.loadFromFile("walls.png", sf::IntRect(0, 0, 49,114));
-    southWallTexture.loadFromFile("walls.png", sf::IntRect(50, 0, 49,114));
-    northWallTexture.loadFromFile("walls.png", sf::IntRect(100, 0, 49,114));
-    eastWallTexture.loadFromFile("walls.png", sf::IntRect(150, 0, 49,114));
-    sf::Sprite[4] wallSprites;
-    sf::Sprite northWallSprite = sf::Sprite(northWallTexture);
-    sf::Sprite southWallSprite = sf::Sprite(southWallTexture);
-    sf::Sprite eastWallSprite = sf::Sprite(eastWallTexture);
-    sf::Sprite westWallSprite = sf::Sprite(westWallTexture);
-
-    sf::Texture map[5];
-
-
-    gameMap map("map.txt", textures);
-    map.loadVerticies();
+    sf::Texture spriteSheet;
+    spriteSheet.loadFromFile("sprites.png");
+    gameMap map("map.txt", spriteSheet);
+    map.loadEntVerticies();
 
     sf::Texture epicTexture;
     epicTexture.loadFromFile("walls.png", sf::IntRect(0,0,49,114));
     sf::Texture epicTexture2;
     epicTexture2.loadFromFile("walls.png", sf::IntRect(49,0,49,114));
 
+    /*
     sf::Sprite test;
     sf::Sprite test2;
     test.setTexture(floorTexture);
@@ -73,7 +57,7 @@ int main()
     wallTest.setTexture(eastWallTexture);
     wallTest.setPosition(WorldToScreen(sf::Vector2f(19.0/3.0, -19.0/3.0)));
     wallTest.move(sf::Vector2f(0,-90));
-
+*/
     //north wall needs an adjustment of y:-90
     //west wall needs to go y:-90 and then world space x:19/3 and y:19/3
     //east needs y:-90 and world x:19/3 y:-19/3
@@ -192,12 +176,11 @@ int main()
 
         //window.draw(actualWall1);
 
-        window.draw(shit, &floorTexture);
+        //window.draw(shit, &floorTexture);
         // end the current frame
         window.display();
 
 
     }
-
     return 0;
 }
