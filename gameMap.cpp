@@ -40,19 +40,37 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
     file.close();
 
     //initialize map tiles
+    direction north = north;
+    direction south = south;
+    direction east = east;
+    direction west = west;
     for(int i=0; i<rows; i++){
         for(int j=0; j<cols; j++){
             if(map2dInts[j][i] == 1 || map2dInts[j][i] == 2){
-                emptyTile(mapTiles[index(j,i)]);
                 //std::cout << "tile: " << j << ", " << i << " nsew: " << mapTiles[index(j,i)].hasNorthWall << " " << mapTiles[index(j,i)].hasSouthWall << " " << mapTiles[index(j,i)].hasEastWall << " " << mapTiles[index(j,i)].hasWestWall << std::endl;
+                mapTiles[index(j, i)].empty = true;
                 continue;
             }
-            mapTiles[index(j,i)].entities.push_back(Wall())
+            if(map2dInts[j-1][i] == 1) {
+                mapTiles[index(j, i)].entities.push_back(Wall(north, j*tileSize, i*tileSize));
+            }
+            if(map2dInts[j][i+1] == 1) {
+                mapTiles[index(j, i)].entities.push_back(Wall(west, (j * tileSize) + tileSize / 3.f,
+                                                              (i * tileSize) + tileSize / 3.f));
+            }
+            if(map2dInts[j+1][i] == 1){
+                mapTiles[index(j, i)].entities.push_back(Wall(south, (j * tileSize) + 2.f * tileSize / 3.f,  i * tileSize));
+            }
+            if(map2dInts[j][i-1] == 1){
+                mapTiles[index(j, i)].entities.push_back(Wall(east, (j * tileSize) + tileSize / 3.f, (i * tileSize) - tileSize / 3.f));
+            }
+            /*
             mapTiles[index(j,i)].isEmpty = false;
             mapTiles[index(j, i)].hasNorthWall = map2dInts[j-1][i] == 1;
             mapTiles[index(j, i)].hasWestWall = map2dInts[j][i+1] == 1;
             mapTiles[index(j, i)].hasSouthWall = map2dInts[j+1][i] == 1;
             mapTiles[index(j, i)].hasEastWall = map2dInts[j][i-1] == 1;
+             */
             //std::cout << "tile: " << j << ", " << i << " nsew: " << mapTiles[index(j,i)].hasNorthWall << " " << mapTiles[index(j,i)].hasSouthWall << " " << mapTiles[index(j,i)].hasEastWall << " " << mapTiles[index(j,i)].hasWestWall << std::endl;
 
         }
@@ -64,112 +82,92 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
     }
     delete[] map2dInts;
 
-    floorVerticies = sf::VertexArray(sf::Quads, 0);
-    otherVerticies = sf::VertexArray(sf::Quads, 0);
+    verticies = sf::VertexArray(sf::Quads, 0);
     spriteSheet = sheet;
 }
 
 void gameMap::loadVerticies() {
-    /*for(int i=0; i<rows; i++){
-        for(int j=0; j<cols; j++){
-            if(!mapTiles[index(j,i)].isEmpty){
-                addElementToVertexArray(floorVerticies, sf::Vector2f(j*tileSize,i*tileSize), floorText, 0.f);
-                //north wall needs an adjustment of y:-90
-                //west wall needs to go y:-90 and then world space x:19/3 and y:19/3
-                //east needs y:-90 and world x:19/3 y:-19/3
-                //south needs y:-90 and world x:2*19/3
-                if(mapTiles[index(j,i)].hasNorthWall){
-                    addElementToVertexArray(northWallVerticies, sf::Vector2f(j*tileSize, i*tileSize), northWallText, 90.f);
-                }
-                if(mapTiles[index(j,i)].hasSouthWall){
-                    addElementToVertexArray(southWallVerticies, sf::Vector2f((j*tileSize)+2.f*tileSize/3.f, i*tileSize), southWallText, 90.f);
-                }
-                if(mapTiles[index(j,i)].hasEastWall){
-                    addElementToVertexArray(eastWallVerticies, sf::Vector2f((j*tileSize)+tileSize/3.f, (i*tileSize)-tileSize/3.f), eastWallText, 90.f);
-                }
-                if(mapTiles[index(j,i)].hasWestWall){
-                    addElementToVertexArray(westWallVerticies, sf::Vector2f((j*tileSize)+tileSize/3.f, i*tileSize+tileSize/3.f), westWallText, 90.f);
-                }
-            }
-        }
-    }*/
     int y;
+
     for (int i = 0; i < rows; i++) {
         for (int x = 0; x < i; x++) {
             y = i - x;
             std::cout << "x: " << x << " y: " << y << std::endl;
-            if (!mapTiles[index(x, y)].isEmpty) {
-                addElementToVertexArray(floorVerticies, sf::Vector2f(x * tileSize, y * tileSize), floorText, 0.f);
-                //north wall needs an adjustment of y:-90
-                //west wall needs to go y:-90 and then world space x:19/3 and y:19/3
-                //east needs y:-90 and world x:19/3 y:-19/3
-                //south needs y:-90 and world x:2*19/3
-                if (mapTiles[index(x, y)].hasNorthWall) {
-                    addElementToVertexArray(northWallVerticies, sf::Vector2f(x * tileSize, y * tileSize), northWallText,90.f);
-                }
-                if (mapTiles[index(x, y)].hasSouthWall) {
-                    addElementToVertexArray(southWallVerticies,sf::Vector2f((x * tileSize) + 2.f * tileSize / 3.f, y * tileSize),southWallText, 90.f);
-                }
-                if (mapTiles[index(x, y)].hasEastWall) {
-                    addElementToVertexArray(eastWallVerticies, sf::Vector2f((x * tileSize) + tileSize / 3.f,(y * tileSize) - tileSize / 3.f),eastWallText, 90.f);
-                }
-                if (mapTiles[index(x, y)].hasWestWall) {
-                    addElementToVertexArray(westWallVerticies, sf::Vector2f((x * tileSize) + tileSize / 3.f,y * tileSize + tileSize / 3.f),westWallText, 90.f);
+            if (!mapTiles[index(x, y)].empty) {
+                //add floor
+                sf::Vertex a = sf::Vertex(WorldToScreen(sf::Vector2f(x * tileSize, y * tileSize)));
+                sf::Vertex b = sf::Vertex(adjustVec(0, 39, a.position));
+                sf::Vertex c = sf::Vertex(adjustVec(75, 39, a.position));
+                sf::Vertex d = sf::Vertex(adjustVec(75, 0, a.position));
+                a.texCoords = a.position;
+                b.texCoords = b.position;
+                c.texCoords = c.position;
+                d.texCoords = d.position;
+                verticies.append(a);
+                verticies.append(b);
+                verticies.append(c);
+                verticies.append(d);
+
+                for (int k = mapTiles[index(x, y)].entities.size() + 1; k >= 0; k--) {
+                    loadEntityToVertexArray(verticies, mapTiles[index(x, y)].entities.at(k));
                 }
             }
         }
     }
     for (int i = 0; i < cols; i++) {
-        y=rows-1;
+        y = rows - 1;
         for (int x = i; x < cols; x++) {
-            if (!mapTiles[index(x, y)].isEmpty) {
-                addElementToVertexArray(floorVerticies, sf::Vector2f(x * tileSize, y * tileSize), floorText, 0.f);
-                //north wall needs an adjustment of y:-90
-                //west wall needs to go y:-90 and then world space x:19/3 and y:19/3
-                //east needs y:-90 and world x:19/3 y:-19/3
-                //south needs y:-90 and world x:2*19/3
-                if (mapTiles[index(x, y)].hasNorthWall) {
-                    addElementToVertexArray(northWallVerticies, sf::Vector2f(x * tileSize, y * tileSize), northWallText,90.f);
+            if (!mapTiles[index(x, y)].empty) {
+                //add floor
+                sf::Vertex a = sf::Vertex(WorldToScreen(sf::Vector2f(x * tileSize, y * tileSize)));
+                sf::Vertex b = sf::Vertex(adjustVec(0, 39, a.position));
+                sf::Vertex c = sf::Vertex(adjustVec(75, 39, a.position));
+                sf::Vertex d = sf::Vertex(adjustVec(75, 0, a.position));
+                a.texCoords = a.position;
+                b.texCoords = b.position;
+                c.texCoords = c.position;
+                d.texCoords = d.position;
+                verticies.append(a);
+                verticies.append(b);
+                verticies.append(c);
+                verticies.append(d);
+
+                for (int k = mapTiles[index(x, y)].entities.size() + 1; k >= 0; k--) {
+                    loadEntityToVertexArray(verticies, mapTiles[index(x, y)].entities.at(k));
+
+                    //north wall needs an adjustment of y:-90
+                    //west wall needs to go y:-90 and then world space x:19/3 and y:19/3
+                    //east needs y:-90 and world x:19/3 y:-19/3
+                    //south needs y:-90 and world x:2*19/3
                 }
-                if (mapTiles[index(x, y)].hasSouthWall) {
-                    addElementToVertexArray(southWallVerticies,sf::Vector2f((x * tileSize) + 2.f * tileSize / 3.f, y * tileSize),southWallText, 90.f);
-                }
-                if (mapTiles[index(x, y)].hasEastWall) {
-                    addElementToVertexArray(eastWallVerticies, sf::Vector2f((x * tileSize) + tileSize / 3.f,(y * tileSize) - tileSize / 3.f),eastWallText, 90.f);
-                }
-                if (mapTiles[index(x, y)].hasWestWall) {
-                    addElementToVertexArray(westWallVerticies, sf::Vector2f((x * tileSize) + tileSize / 3.f,y * tileSize + tileSize / 3.f),westWallText, 90.f);
-                }
+                y--;
             }
-            y--;
         }
     }
 }
 
 void gameMap::renderMap(sf::RenderWindow *window) {
-    window->draw(floorVerticies, &floorText);
-    window->draw(southWallVerticies, &southWallText);
-    window->draw(westWallVerticies, &westWallText);
-    window->draw(northWallVerticies, &northWallText);
-    window->draw(eastWallVerticies, &eastWallText);
-
+    window->draw(verticies, &spriteSheet);
 }
 
-void gameMap::addElementToVertexArray(sf::VertexArray &v, sf::Vector2f worldCoords, sf::Texture t, float zHeight) {
-    sf::Vertex root = sf::Vertex(WorldToScreen(worldCoords));
+void gameMap::loadEntityToVertexArray(sf::VertexArray &v, Entity e) {
+    sf::Vertex root = sf::Vertex(WorldToScreen(sf::Vector2f(e.worldX, e.worldY)));
     //std::cout << "adding tile at: " << worldCoords.x << "," << worldCoords.y << std::endl;
-    root.texCoords = sf::Vector2f(0,0);
-    sf::Vertex two = adjustVec(t.getSize().x, 0, root.position);
-    two.texCoords = sf::Vector2f(t.getSize().x, 0);
-    sf::Vertex three = adjustVec(t.getSize().x, t.getSize().y, root.position);
-    three.texCoords = sf::Vector2f(t.getSize().x, t.getSize().y);
-    sf::Vertex four = adjustVec(0, t.getSize().y, root.position);
-    four.texCoords = sf::Vector2f(0, t.getSize().y);
+    root.texCoords = sf::Vector2f(e.texCoords.left,e.texCoords.top);
 
-    root.position.y -= zHeight;
-    two.position.y -= zHeight;
-    three.position.y -= zHeight;
-    four.position.y -= zHeight;
+    sf::Vertex two = adjustVec(0, e.texCoords.height, root.position);
+    two.texCoords = adjustVec(0, e.texCoords.height, root.texCoords);
+
+    sf::Vertex three = adjustVec(e.texCoords.width, e.texCoords.height, root.position);
+    three.texCoords = adjustVec(e.texCoords.width, e.texCoords.height, root.texCoords);
+
+    sf::Vertex four = adjustVec(e.texCoords.width, 0, root.position);
+    four.texCoords = adjustVec(e.texCoords.width, 0, root.texCoords);
+
+    root.position.y -= e.zHeight;
+    two.position.y -= e.zHeight;
+    three.position.y -= e.zHeight;
+    four.position.y -= e.zHeight;
 
     v.append(root);
     v.append(two);

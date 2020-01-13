@@ -31,7 +31,6 @@ sf::Vector2f adjustVec(float x, float y, sf::Vector2f z){
 int main()
 {
 
-
     // create the window
     sf::RenderWindow window(sf::VideoMode(1000, 1000), "My window");
     window.setFramerateLimit(60);
@@ -45,13 +44,14 @@ int main()
     southWallTexture.loadFromFile("walls.png", sf::IntRect(50, 0, 49,114));
     northWallTexture.loadFromFile("walls.png", sf::IntRect(100, 0, 49,114));
     eastWallTexture.loadFromFile("walls.png", sf::IntRect(150, 0, 49,114));
+    sf::Sprite[4] wallSprites;
+    sf::Sprite northWallSprite = sf::Sprite(northWallTexture);
+    sf::Sprite southWallSprite = sf::Sprite(southWallTexture);
+    sf::Sprite eastWallSprite = sf::Sprite(eastWallTexture);
+    sf::Sprite westWallSprite = sf::Sprite(westWallTexture);
 
-    sf::Texture textures[5];
-    textures[0] = floorTexture;
-    textures[1] = northWallTexture;
-    textures[2] = southWallTexture;
-    textures[3] = eastWallTexture;
-    textures[4] = westWallTexture;
+    sf::Texture map[5];
+
 
     gameMap map("map.txt", textures);
     map.loadVerticies();

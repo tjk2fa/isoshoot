@@ -6,25 +6,39 @@
 #define GAME_ENTITY_H
 #include "SFML/Graphics.hpp"
 
+enum direction{
+    north,
+    south,
+    east,
+    west,
+    northeast,
+    southeast,
+    southwest,
+    northwest
+};
+
+enum activeEntType{
+    zombie,
+    bullet,
+};
+
 class Entity{
-private:
+public:
     int worldX;
     int worldY;
-    sf::Sprite& sprite;
-public:
-    Entity(int x, int y, sf::Sprite& s);
+    int zHeight;
+    sf::IntRect texCoords;
+
+
+    Entity(int x, int y);
 
 };
 
 struct Wall : Entity{
-    enum direction{
-        north,
-        south,
-        east,
-        west
-    };
     direction dir;
-    Wall(direction d, int x, int y, sf::Sprite& s);
+    const int wallSpriteWidth = 49;
+    const int wallSpriteHeight = 114;
+    Wall(direction d, int x, int y);
 };
 
 /*

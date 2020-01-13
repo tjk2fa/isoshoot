@@ -12,7 +12,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-
+#include "Entity.h"
 
 class gameMap {
 
@@ -20,7 +20,11 @@ class gameMap {
     private:
     struct mapTile {
         std::vector<Entity> entities;
-        mapTile()= default;
+        bool empty;
+        mapTile(){
+            entities = std::vector<Entity>();
+            bool empty = false;
+        }
     };
 
 
@@ -40,19 +44,12 @@ class gameMap {
     //tilez is a 2d grid stored as a 1d array for speed, use this function to get a certain index
     size_t index( int x, int y ) const { return x + cols*y; }
 
-    sf::VertexArray floorVerticies;
-    sf::VertexArray otherVerticies;
+    sf::VertexArray verticies;
     sf::Texture spriteSheet;
 
 
 
-    static void emptyTile(mapTile &m){
-        m.isEmpty = true;
-        m.hasWestWall = false;
-        m.hasEastWall = false;
-        m.hasSouthWall = false;
-        m.hasNorthWall = false;
-    }
+
 
     /*reads in a map file consisting of a rectangle of ones, twos, and zeroes
      * 0 = empty tile
@@ -61,9 +58,9 @@ class gameMap {
      *
      * */
     public:
-    void addElementToVertexArray(sf::VertexArray &v, sf::Vector2f worldCoords, sf::Texture, float zHeight);
+    void loadEntityToVertexArray(sf::VertexArray &v, Entity e);
 
-    gameMap(std::string filename, sf::Texture textures[5]);
+    gameMap(std::string filename, sf::Texture sheet);
     //~gameMap();
     void generateMap();
     void getTile(int x, int y);
