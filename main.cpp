@@ -38,7 +38,6 @@ int main()
     spriteSheet.loadFromFile("sprites.png");
     gameMap map("map.txt", spriteSheet);
     map.loadEntVerticies();
-
     sf::Texture epicTexture;
     epicTexture.loadFromFile("walls.png", sf::IntRect(0,0,49,114));
     sf::Texture epicTexture2;

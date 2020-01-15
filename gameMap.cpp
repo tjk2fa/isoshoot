@@ -19,10 +19,10 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
 
 
     auto* mapLines = new std::string[rows];
-    int** map2dInts = new int*[cols];
+    char** map2dChars = new char*[cols];
     mapTiles = new mapTile[cols*rows];
     for(int i = 0; i < cols; ++i) {
-        map2dInts[i] = new int[rows];
+        map2dChars[i] = new char[rows];
     }
 
     if(!file.is_open()){
@@ -35,7 +35,7 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
     }
     for(int i=0; i<rows; i++){
         for(int j=0; j<cols; j++){
-            map2dInts[j][i] = ((int)mapLines[i][j])-48;
+            map2dChars[j][i] = mapLines[i][j];
             //std::cout << map2dInts[j][i];
 
         }
@@ -52,13 +52,47 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
             mapTiles[index(j,i)] = mapTile();
 
             //std::cout << map2dInts[j][i];
-            if(map2dInts[j][i] == 1 || map2dInts[j][i] == 2){
+            if(map2dChars[j][i] == '2'){
                 //cout << "tile was empty branch" << endl;
                 mapTiles[index(j, i)].empty = true;
                 //std::cout << "(x,y): " << j << ", " << i << "empty?: " << mapTiles[index(j, i)].empty << std::endl;
             }
-            else if (map2dInts[j][i] == 0) {
-                //cout << "tile was not empty branch" << endl;
+            else {
+                cout <<  map2dChars[j][i] << endl;
+
+                if (map2dChars[j][i] == 'w') {
+                    mapTiles[index(j, i)].entities.push_back(Wall(north, j * tileSize, i * tileSize));
+                }
+                else if (map2dChars[j][i] == 'e') {
+                    mapTiles[index(j, i)].entities.push_back(
+                            Wall(south, (j * tileSize) + 2.f * tileSize / 3.f, i * tileSize));
+                }
+                else if (map2dChars[j][i] == 'n') {
+                    mapTiles[index(j, i)].entities.push_back(
+                            Wall(east, (j * tileSize) + tileSize/3, (i * tileSize) - tileSize/3));
+                }
+                else if (map2dChars[j][i] == 's') {
+                            mapTiles[index(j, i)].entities.push_back(Wall(west, (j * tileSize) + tileSize / 3.f,
+                                                                          (i * tileSize) + tileSize / 3.f));
+                }
+                else if(map2dChars[j][i] == 'i'){
+                    mapTiles[index(j, i)].entities.push_back(Wall(northwest, j * tileSize, i * tileSize));
+
+                }
+                else if(map2dChars[j][i] == 'j'){
+                    mapTiles[index(j, i)].entities.push_back(Wall(southwest, j * tileSize, i * tileSize));
+
+                }
+                else if(map2dChars[j][i] == 'k'){
+                    mapTiles[index(j, i)].entities.push_back(Wall(southeast, j * tileSize+tileSize/3.f, i * tileSize+tileSize/3.f));
+
+                }
+                else if(map2dChars[j][i] == 'l'){
+                    mapTiles[index(j, i)].entities.push_back(Wall(northeast, j * tileSize+tileSize/3.f, i * tileSize-tileSize/3.f));
+
+                }
+                /*
+                 * old system
                 if (map2dInts[j - 1][i] == 1) {
                     mapTiles[index(j, i)].entities.push_back(Wall(north, j * tileSize, i * tileSize));
                 }
@@ -74,6 +108,7 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
                     mapTiles[index(j, i)].entities.push_back(
                             Wall(east, (j * tileSize) + tileSize / 3.f, (i * tileSize) - tileSize / 3.f));
                 }
+                 */
 
             }
             /*
@@ -90,9 +125,9 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
     }
     delete[] mapLines;
     for(int i=0; i<cols; i++){
-        delete[] map2dInts[i];
+        delete[] map2dChars[i];
     }
-    delete[] map2dInts;
+    delete[] map2dChars;
 
     verticies = sf::VertexArray(sf::Quads, 0);
     floorVerticies = sf::VertexArray(sf::Quads, 0);

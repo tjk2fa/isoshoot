@@ -34,7 +34,7 @@ class gameMap {
      * is approximately equal to the height of a floor
      * sprite divided by two or the width of a floor sprite
      * divided by four. */
-    const float tileSize = 19.f;
+    const float tileSize = 18.f;
 
     mapTile* mapTiles;
 
