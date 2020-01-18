@@ -38,11 +38,10 @@ class gameMap {
 
     mapTile* mapTiles;
 
-    int cols; //x size of world in number of tiles
-    int rows; //y size of world in number of tiles
+    int size; //world is a square of this size
 
     //tilez is a 2d grid stored as a 1d array for speed, use this function to get a certain index
-    size_t index( int x, int y ) const { return x + cols*y; }
+    size_t index( int x, int y ) const { return x + size*y; }
 
     sf::VertexArray floorVerticies;
     sf::VertexArray verticies;
@@ -52,10 +51,11 @@ class gameMap {
 
 
 
-    /*reads in a map file consisting of a rectangle of ones, twos, and zeroes
-     * 0 = empty tile
-     * 1 = wall
+    /*reads in a map file consisting of a square of characters in plaintext
      * 2 = free space
+     * 0 = empty tile
+     * n,s,e,w = wall in respective direction
+     * i,j,k,l = corner in ne, se, sw, nw direction
      *
      * */
     public:

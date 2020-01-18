@@ -41,24 +41,18 @@ struct Wall : Entity{
     Wall(direction d, int x, int y);
 };
 
-/*
-struct activeEntity : Entity{
-    enum direction{
-        north,
-        south,
-        east,
-        west,
-        northeast,
-        southeast,
-        southwest,
-        northwest
-    };
-    enum type{
-        human,
-        zombie
-    };
-    sf::Vector2f velocity;
-    activeEntity(direction d, type t);
+
+class activeEntity : Entity{
+
+    direction dir;
+    activeEntType type;
+    bool moving;
+
+
+
+
+    activeEntity(direction d, activeEntType t);
 };
- */
+
+
 #endif //GAME_ENTITY_H

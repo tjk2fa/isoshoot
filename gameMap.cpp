@@ -11,55 +11,39 @@ using namespace std;
 
 gameMap::gameMap(std::string filename, sf::Texture sheet){
     std::ifstream file(filename);
-    //first two lines of map file are the number of rows and cols
-    rows = 0;
-    cols = 0;
-    file >> rows;
-    file >> cols;
-
-
-    auto* mapLines = new std::string[rows];
-    char** map2dChars = new char*[cols];
-    mapTiles = new mapTile[cols*rows];
-    for(int i = 0; i < cols; ++i) {
-        map2dChars[i] = new char[rows];
+    //first two lines of map file are the number of size and size
+    size = 0;
+    file >> size;
+    
+    string* mapLines = new std::string[size];
+    char** map2dChars = new char*[size];
+    mapTiles = new mapTile[size*size];
+    for(int i = 0; i < size; ++i) {
+        map2dChars[i] = new char[size];
     }
 
     if(!file.is_open()){
         exit(1);
     }
-    //read each line of file into mapLines[] as a string, then read each char of those strings into map2dInts
-    for(int i=0; i<rows; i++){
+    //read each line of file into mapLines[] as a string, then read each char of those strings into map2dChars
+    for(int i=0; i<size; i++){
         file >> mapLines[i];
-
     }
-    for(int i=0; i<rows; i++){
-        for(int j=0; j<cols; j++){
+    for(int i=0; i<size; i++){
+        for(int j=0; j<size; j++){
             map2dChars[j][i] = mapLines[i][j];
-            //std::cout << map2dInts[j][i];
-
         }
-        //std::cout << std::endl;
     }
-
     file.close();
 
     //initialize map tiles
-
-    for(int i=0; i<rows; i++){
-        //std::cout << std::endl;
-        for(int j=0; j<cols; j++){
+    for(int i=0; i<size; i++){
+        for(int j=0; j<size; j++){
             mapTiles[index(j,i)] = mapTile();
-
-            //std::cout << map2dInts[j][i];
             if(map2dChars[j][i] == '2'){
-                //cout << "tile was empty branch" << endl;
                 mapTiles[index(j, i)].empty = true;
-                //std::cout << "(x,y): " << j << ", " << i << "empty?: " << mapTiles[index(j, i)].empty << std::endl;
             }
             else {
-                cout <<  map2dChars[j][i] << endl;
-
                 if (map2dChars[j][i] == 'w') {
                     mapTiles[index(j, i)].entities.push_back(Wall(north, j * tileSize, i * tileSize));
                 }
@@ -91,40 +75,11 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
                     mapTiles[index(j, i)].entities.push_back(Wall(northeast, j * tileSize+tileSize/3.f, i * tileSize-tileSize/3.f));
 
                 }
-                /*
-                 * old system
-                if (map2dInts[j - 1][i] == 1) {
-                    mapTiles[index(j, i)].entities.push_back(Wall(north, j * tileSize, i * tileSize));
-                }
-                if (map2dInts[j][i + 1] == 1) {
-                    mapTiles[index(j, i)].entities.push_back(Wall(west, (j * tileSize) + tileSize / 3.f,
-                                                                  (i * tileSize) + tileSize / 3.f));
-                }
-                if (map2dInts[j + 1][i] == 1) {
-                    mapTiles[index(j, i)].entities.push_back(
-                            Wall(south, (j * tileSize) + 2.f * tileSize / 3.f, i * tileSize));
-                }
-                if (map2dInts[j][i - 1] == 1) {
-                    mapTiles[index(j, i)].entities.push_back(
-                            Wall(east, (j * tileSize) + tileSize / 3.f, (i * tileSize) - tileSize / 3.f));
-                }
-                 */
-
             }
-            /*
-            mapTiles[index(j,i)].isEmpty = false;
-            mapTiles[index(j, i)].hasNorthWall = map2dInts[j-1][i] == 1;
-            mapTiles[index(j, i)].hasWestWall = map2dInts[j][i+1] == 1;
-            mapTiles[index(j, i)].hasSouthWall = map2dInts[j+1][i] == 1;
-            mapTiles[index(j, i)].hasEastWall = map2dInts[j][i-1] == 1;
-             */
-            //std::cout << "tile: " << j << ", " << i << " nsew: " << mapTiles[index(j,i)].hasNorthWall << " " << mapTiles[index(j,i)].hasSouthWall << " " << mapTiles[index(j,i)].hasEastWall << " " << mapTiles[index(j,i)].hasWestWall << std::endl;
-            //std::cout << "(x,y): " << j << ", " << i << "empty?: " << mapTiles[index(j, i)].empty << std::endl;
-
         }
     }
     delete[] mapLines;
-    for(int i=0; i<cols; i++){
+    for(int i=0; i<size; i++){
         delete[] map2dChars[i];
     }
     delete[] map2dChars;
@@ -132,27 +87,17 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
     verticies = sf::VertexArray(sf::Quads, 0);
     floorVerticies = sf::VertexArray(sf::Quads, 0);
     spriteSheet = sheet;
-    int y = 0;
-
     /*
-    for (int i = 0; i < rows; i++) {
+     * Load verticies for floor tiles
+     *
+     * Floor tiles aren't entities because their place in the draw order never needs to be updated
+     *
+     */
+    int y = 0;
+    for (int i = 0; i < size; i++) {
         for (int x = 0; x <= i; x++) {
             y = i - x;
-            std::cout << "i: " << i << std::endl;
-            std::cout << "(x,y): " << x << ", " << y << std::endl;
-            //y--;
-        }
-    }
-    */
-    //exit(1);
-
-    for (int i = 0; i < rows; i++) {
-        for (int x = 0; x <= i; x++) {
-            y = i - x;
-            //std::cout << "x: " << x << " y: " << y << std::endl;
             if (!mapTiles[index(x, y)].empty) {
-
-                //add floor
                 sf::Vertex a = sf::Vertex(WorldToScreen(sf::Vector2f(x * tileSize, y * tileSize)));
                 sf::Vertex b = sf::Vertex(adjustVec(0, 39, a.position));
                 sf::Vertex c = sf::Vertex(adjustVec(75, 39, a.position));
@@ -165,20 +110,14 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
                 floorVerticies.append(b);
                 floorVerticies.append(c);
                 floorVerticies.append(d);
-                std::cout << "i: " << i << std::endl;
-                std::cout << "(x,y): " << x << ", " << y << std::endl;
             }
         }
     }
-
-    for (int i = 0; i < cols; i++) {
-        y = rows - 1;
-        for (int x = i; x < cols; x++) {
+    for (int i = 0; i < size; i++) {
+        y = size - 1;
+        for (int x = i; x < size; x++) {
 
             if (!mapTiles[index(x, y)].empty) {
-                std::cout << "i: " << i << std::endl;
-                std::cout << "(x,y): " << x << ", " << y << std::endl;
-                //add floor
                 sf::Vertex a = sf::Vertex(WorldToScreen(sf::Vector2f(x * tileSize, y * tileSize)));
                 sf::Vertex b = sf::Vertex(adjustVec(0, 39, a.position));
                 sf::Vertex c = sf::Vertex(adjustVec(75, 39, a.position));
@@ -191,7 +130,6 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
                 floorVerticies.append(b);
                 floorVerticies.append(c);
                 floorVerticies.append(d);
-
             }
             y--;
         }
@@ -202,34 +140,32 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
 
 gameMap::~gameMap(){
     delete[] mapTiles;
-
 }
 
 
 
-
+/*
+ * Loop through every tile in the map in screen y order (loop through each diagonal of the square)
+ *
+ * For each tile, load all of its entities to a vertex array
+ */
 void gameMap::loadEntVerticies() {
     int y;
-    for (int i = 0; i < rows; i++) {
+    for (int i = 0; i < size; i++) {
         for (int x = 0; x <= i; x++) {
             y = i - x;
             for (int k = mapTiles[index(x, y)].entities.size() - 1; k >= 0; k--) {
                     loadEntityToVertexArray(verticies, mapTiles[index(x, y)].entities.at(k));
-
             }
         }
     }
-    for (int i = 0; i < cols; i++) {
-        y = rows - 1;
-        for (int x = i; x < cols; x++) {
+    for (int i = 0; i < size; i++) {
+        y = size - 1;
+        for (int x = i; x < size; x++) {
             for (int k = mapTiles[index(x, y)].entities.size() - 1; k >= 0; k--) {
                 loadEntityToVertexArray(verticies, mapTiles[index(x, y)].entities.at(k));
-                    //north wall needs an adjustment of y:-90
-                    //west wall needs to go y:-90 and then world space x:19/3 and y:19/3
-                    //east needs y:-90 and world x:19/3 y:-19/3
-                    //south needs y:-90 and world x:2*19/3
                 }
-                y--;
+            y--;
         }
     }
 }
@@ -242,7 +178,6 @@ void gameMap::renderMap(sf::RenderWindow *window) {
 
 void gameMap::loadEntityToVertexArray(sf::VertexArray &v, Entity e) {
     sf::Vertex root = sf::Vertex(WorldToScreen(sf::Vector2f(e.worldX, e.worldY)));
-    //std::cout << "adding tile at: " << worldCoords.x << "," << worldCoords.y << std::endl;
     root.texCoords = sf::Vector2f(e.texCoords.left,e.texCoords.top);
 
     sf::Vertex two = adjustVec(0, e.texCoords.height, root.position);
