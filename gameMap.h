@@ -40,7 +40,7 @@ class gameMap {
 
     int size; //world is a square of this size
 
-    //tilez is a 2d grid stored as a 1d array for speed, use this function to get a certain index
+    //mapTiles is a 2d grid stored as a 1d array for speed, use this function to get a certain index
     size_t index( int x, int y ) const { return x + size*y; }
 
     sf::VertexArray floorVerticies;

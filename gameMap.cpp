@@ -44,35 +44,38 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
                 mapTiles[index(j, i)].empty = true;
             }
             else {
+                /**
+                 * Need to change this so that all the aligning is done in the wall constructors and not here
+                 */
                 if (map2dChars[j][i] == 'w') {
-                    mapTiles[index(j, i)].entities.push_back(Wall(north, j * tileSize, i * tileSize));
+                    mapTiles[index(j, i)].entities.push_back(Wall(north, j * tileSize, i * tileSize, tileSize));
                 }
                 else if (map2dChars[j][i] == 'e') {
                     mapTiles[index(j, i)].entities.push_back(
-                            Wall(south, (j * tileSize) + 2.f * tileSize / 3.f, i * tileSize));
+                            Wall(south, (j * tileSize) + 2.f * tileSize / 3.f, i * tileSize, tileSize));
                 }
                 else if (map2dChars[j][i] == 'n') {
                     mapTiles[index(j, i)].entities.push_back(
-                            Wall(east, (j * tileSize) + tileSize/3, (i * tileSize) - tileSize/3));
+                            Wall(east, (j * tileSize) + tileSize/3, (i * tileSize) - tileSize/3, tileSize));
                 }
                 else if (map2dChars[j][i] == 's') {
                             mapTiles[index(j, i)].entities.push_back(Wall(west, (j * tileSize) + tileSize / 3.f,
-                                                                          (i * tileSize) + tileSize / 3.f));
+                                                                          (i * tileSize) + tileSize / 3.f, tileSize));
                 }
                 else if(map2dChars[j][i] == 'i'){
-                    mapTiles[index(j, i)].entities.push_back(Wall(northwest, j * tileSize, i * tileSize));
+                    mapTiles[index(j, i)].entities.push_back(Wall(northwest, j * tileSize, i * tileSize, tileSize));
 
                 }
                 else if(map2dChars[j][i] == 'j'){
-                    mapTiles[index(j, i)].entities.push_back(Wall(southwest, j * tileSize, i * tileSize));
+                    mapTiles[index(j, i)].entities.push_back(Wall(southwest, j * tileSize, i * tileSize, tileSize));
 
                 }
                 else if(map2dChars[j][i] == 'k'){
-                    mapTiles[index(j, i)].entities.push_back(Wall(southeast, j * tileSize+tileSize/3.f, i * tileSize+tileSize/3.f));
+                    mapTiles[index(j, i)].entities.push_back(Wall(southeast, j * tileSize+tileSize/3.f, i * tileSize+tileSize/3.f, tileSize));
 
                 }
                 else if(map2dChars[j][i] == 'l'){
-                    mapTiles[index(j, i)].entities.push_back(Wall(northeast, j * tileSize+tileSize/3.f, i * tileSize-tileSize/3.f));
+                    mapTiles[index(j, i)].entities.push_back(Wall(northeast, j * tileSize+tileSize/3.f, i * tileSize-tileSize/3.f, tileSize));
 
                 }
             }

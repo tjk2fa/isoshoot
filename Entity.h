@@ -18,6 +18,7 @@ enum direction{
 };
 
 enum activeEntType{
+    player,
     zombie,
     bullet,
 };
@@ -26,13 +27,13 @@ class Entity{
 public:
 
     int zHeight;
-    int worldX;
-    int worldY;
-    sf::IntRect worldCoords;
-    sf::IntRect texCoords;
+    int worldX; //location to render entity
+    int worldY; //location to render entity
+    std::vector<sf::IntRect> worldCoords; //vector of rectangles for collisions
+    sf::IntRect texCoords; //where the ent is on the sprite sheet
 
 
-    Entity(int x, int y);
+    Entity(int x, int y, float tileSize);
 
 };
 
@@ -40,7 +41,7 @@ struct Wall : Entity{
     direction dir;
     const int wallSpriteWidth = 49;
     const int wallSpriteHeight = 114;
-    Wall(direction d, int x, int y);
+    Wall(direction d, int x, int y, float tileSize);
 };
 
 
@@ -53,7 +54,7 @@ class activeEntity : Entity{
 
 
 
-    activeEntity(direction d, activeEntType t);
+    activeEntity(activeEntType d, int x, int y, float tileSize);
 };
 
 
