@@ -24,9 +24,11 @@ enum activeEntType{
 
 class Entity{
 public:
+
+    int zHeight;
     int worldX;
     int worldY;
-    int zHeight;
+    sf::IntRect worldCoords;
     sf::IntRect texCoords;
 
 

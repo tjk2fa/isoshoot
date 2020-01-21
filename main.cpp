@@ -32,7 +32,12 @@ int main()
         window.clear(sf::Color::Black);
 
         //draw everything to the screen in the correct order
-        map.renderMap(&window);
+       sf::CircleShape circle = sf::CircleShape(1, 500);
+       circle.setPosition(WorldToScreen(sf::Vector2f(+9+6,-9+18)));
+       //circle.move(WorldToScreen(sf::Vector2f(18,18)));
+       //circle.move(sf::Vector2f(35,0));
+       map.renderMap(&window);
+       window.draw(circle);
 
         // end the current frame
         window.display();

@@ -7,6 +7,8 @@
 Entity::Entity(int x, int y){
     worldX = x;
     worldY = y;
+    std::cout << "entity at: " << x << y << std::endl;
+    worldCoords = sf::IntRect(9+x,y-9,0,0);
 }
 
 Wall::Wall(direction d, int x, int y) : Entity(x, y){
@@ -35,6 +37,8 @@ Wall::Wall(direction d, int x, int y) : Entity(x, y){
         texCoords.top = 0;
         texCoords.width = wallSpriteWidth;
         texCoords.height = wallSpriteHeight;
+        worldCoords.height = 18;
+        worldCoords.width = 6;
     }
     else if (d==southeast) {
         texCoords.left = 444;

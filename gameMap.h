@@ -48,9 +48,6 @@ class gameMap {
     sf::Texture spriteSheet;
 
 
-
-
-
     /*reads in a map file consisting of a square of characters in plaintext
      * 2 = free space
      * 0 = empty tile
