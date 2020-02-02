@@ -3,6 +3,10 @@
 //
 
 #include "gameMap.h"
+#include "mapTile.h"
+#include "Entity.h"
+
+
 using namespace std;
 //north wall needs an adjustment of y:-90
 //west wall needs to go y:-90 and then world space x:19/3 and y:19/3
@@ -48,35 +52,37 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
                  * Need to change this so that all the aligning is done in the wall constructors and not here
                  */
                 if (map2dChars[j][i] == 'w') {
-                    mapTiles[index(j, i)].entities.push_back(Wall(north, j * tileSize, i * tileSize, tileSize));
+                    mapTiles[index(j, i)].entities.push_back(new Wall(north, j * tileSize, i * tileSize, tileSize));
                 }
                 else if (map2dChars[j][i] == 'e') {
                     mapTiles[index(j, i)].entities.push_back(
-                            Wall(south, (j * tileSize) + 2.f * tileSize / 3.f, i * tileSize, tileSize));
+                            new Wall(south, (j * tileSize) + 2.f * tileSize / 3.f, i * tileSize, tileSize));
                 }
                 else if (map2dChars[j][i] == 'n') {
-                    mapTiles[index(j, i)].entities.push_back(
-                            Wall(east, (j * tileSize) + tileSize/3, (i * tileSize) - tileSize/3, tileSize));
+                    mapTiles[index(j, i)].entities.push_back(new Wall(east, (j * tileSize) + tileSize/3, (i * tileSize) - tileSize/3, tileSize));
                 }
                 else if (map2dChars[j][i] == 's') {
-                            mapTiles[index(j, i)].entities.push_back(Wall(west, (j * tileSize) + tileSize / 3.f,
+                            mapTiles[index(j, i)].entities.push_back(new Wall(west, (j * tileSize) + tileSize / 3.f,
                                                                           (i * tileSize) + tileSize / 3.f, tileSize));
                 }
                 else if(map2dChars[j][i] == 'i'){
-                    mapTiles[index(j, i)].entities.push_back(Wall(northwest, j * tileSize, i * tileSize, tileSize));
+                    mapTiles[index(j, i)].entities.push_back(new Wall(northwest, j * tileSize, i * tileSize, tileSize));
 
                 }
                 else if(map2dChars[j][i] == 'j'){
-                    mapTiles[index(j, i)].entities.push_back(Wall(southwest, j * tileSize, i * tileSize, tileSize));
+                    mapTiles[index(j, i)].entities.push_back(new Wall(southwest, j * tileSize, i * tileSize, tileSize));
 
                 }
                 else if(map2dChars[j][i] == 'k'){
-                    mapTiles[index(j, i)].entities.push_back(Wall(southeast, j * tileSize+tileSize/3.f, i * tileSize+tileSize/3.f, tileSize));
+                    mapTiles[index(j, i)].entities.push_back(new Wall(southeast, j * tileSize+tileSize/3.f, i * tileSize+tileSize/3.f, tileSize));
 
                 }
                 else if(map2dChars[j][i] == 'l'){
-                    mapTiles[index(j, i)].entities.push_back(Wall(northeast, j * tileSize+tileSize/3.f, i * tileSize-tileSize/3.f, tileSize));
+                    mapTiles[index(j, i)].entities.push_back(new Wall(northeast, j * tileSize+tileSize/3.f, i * tileSize-tileSize/3.f, tileSize));
 
+                }
+                else if(map2dChars[j][i] == 'p'){
+                    mapTiles[index(j, i)].entities.push_back((Entity*)(new activeEntity(player, 1, 1, 1)));   //activeEntity(player, tileSize*j, tileSize*i, tileSize, this));
                 }
             }
         }
@@ -142,6 +148,11 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
 }
 
 gameMap::~gameMap(){
+    for(int x=0; x<(size*size); x++){
+        for(int y=0; y<mapTiles[x].entities.size(); x++){
+            delete mapTiles[x].entities[y];
+        }
+    }
     delete[] mapTiles;
 }
 
@@ -179,23 +190,24 @@ void gameMap::renderMap(sf::RenderWindow *window) {
 
 }
 
-void gameMap::loadEntityToVertexArray(sf::VertexArray &v, Entity e) {
-    sf::Vertex root = sf::Vertex(WorldToScreen(sf::Vector2f(e.worldX, e.worldY)));
-    root.texCoords = sf::Vector2f(e.texCoords.left,e.texCoords.top);
 
-    sf::Vertex two = adjustVec(0, e.texCoords.height, root.position);
-    two.texCoords = adjustVec(0, e.texCoords.height, root.texCoords);
+void gameMap::loadEntityToVertexArray(sf::VertexArray &v, Entity* e) {
+    sf::Vertex root = sf::Vertex(WorldToScreen(sf::Vector2f(e->worldX, e->worldY)));
+    root.texCoords = sf::Vector2f(e->texCoords.left,e->texCoords.top);
 
-    sf::Vertex three = adjustVec(e.texCoords.width, e.texCoords.height, root.position);
-    three.texCoords = adjustVec(e.texCoords.width, e.texCoords.height, root.texCoords);
+    sf::Vertex two = adjustVec(0, e->texCoords.height, root.position);
+    two.texCoords = adjustVec(0, e->texCoords.height, root.texCoords);
 
-    sf::Vertex four = adjustVec(e.texCoords.width, 0, root.position);
-    four.texCoords = adjustVec(e.texCoords.width, 0, root.texCoords);
+    sf::Vertex three = adjustVec(e->texCoords.width, e->texCoords.height, root.position);
+    three.texCoords = adjustVec(e->texCoords.width, e->texCoords.height, root.texCoords);
 
-    root.position.y -= e.zHeight;
-    two.position.y -= e.zHeight;
-    three.position.y -= e.zHeight;
-    four.position.y -= e.zHeight;
+    sf::Vertex four = adjustVec(e->texCoords.width, 0, root.position);
+    four.texCoords = adjustVec(e->texCoords.width, 0, root.texCoords);
+
+    root.position.y -= e->zHeight;
+    two.position.y -= e->zHeight;
+    three.position.y -= e->zHeight;
+    four.position.y -= e->zHeight;
 
     v.append(root);
     v.append(two);

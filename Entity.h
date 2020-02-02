@@ -6,6 +6,12 @@
 #define GAME_ENTITY_H
 #include "SFML/Graphics.hpp"
 
+class gameMap;
+class mapTile;
+
+
+
+
 enum direction{
     north,
     south,
@@ -25,7 +31,7 @@ enum activeEntType{
 
 class Entity{
 public:
-
+    //mapTile* map;
     int zHeight;
     int worldX; //location to render entity
     int worldY; //location to render entity
@@ -45,16 +51,14 @@ struct Wall : Entity{
 };
 
 
-class activeEntity : Entity{
+struct activeEntity : Entity {
 
+    mapTile* map;
     direction dir;
     activeEntType type;
     bool moving;
-
-
-
-
     activeEntity(activeEntType d, int x, int y, float tileSize);
+
 };
 
 

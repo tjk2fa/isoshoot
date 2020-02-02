@@ -4,6 +4,10 @@
 
 #include <iostream>
 #include "Entity.h"
+#include "gameMap.h"
+
+
+
 Entity::Entity(int x, int y, float tileSize){
     worldX = x;
     worldY = y;
@@ -124,5 +128,9 @@ activeEntity::activeEntity(activeEntType d, int x, int y, float tileSize) : Enti
         worldCoords[0].width = tileSize;
         worldCoords[0].width = tileSize;
     }
+    moving = false;
+    dir = southeast;
+    type = d;
+
 
 }

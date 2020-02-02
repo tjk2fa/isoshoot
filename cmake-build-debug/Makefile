@@ -231,6 +231,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+mapTile.o: mapTile.cpp.o
+
+.PHONY : mapTile.o
+
+# target to build an object file
+mapTile.cpp.o:
+	$(MAKE) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/mapTile.cpp.o
+.PHONY : mapTile.cpp.o
+
+mapTile.i: mapTile.cpp.i
+
+.PHONY : mapTile.i
+
+# target to preprocess a source file
+mapTile.cpp.i:
+	$(MAKE) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/mapTile.cpp.i
+.PHONY : mapTile.cpp.i
+
+mapTile.s: mapTile.cpp.s
+
+.PHONY : mapTile.s
+
+# target to generate assembly for a file
+mapTile.cpp.s:
+	$(MAKE) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/mapTile.cpp.s
+.PHONY : mapTile.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -252,6 +279,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... mapTile.o"
+	@echo "... mapTile.i"
+	@echo "... mapTile.s"
 .PHONY : help
 
 

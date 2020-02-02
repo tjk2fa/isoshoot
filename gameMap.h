@@ -12,20 +12,16 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "Entity.h"
+
+class Entity;
+class mapTile;
+
+
 
 class gameMap {
 
 
-    private:
-    struct mapTile {
-        std::vector<Entity> entities;
-        bool empty;
-        mapTile(){
-            entities = std::vector<Entity>();
-            empty = false;
-        }
-    };
+
 
 
     /*This is the dimension of one square in world space.
@@ -56,7 +52,7 @@ class gameMap {
      *
      * */
     public:
-    void loadEntityToVertexArray(sf::VertexArray &v, Entity e);
+    void loadEntityToVertexArray(sf::VertexArray &v, Entity* e);
 
     gameMap(std::string filename, sf::Texture sheet);
     ~gameMap();
