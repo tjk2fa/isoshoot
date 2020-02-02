@@ -49,7 +49,9 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
             }
             else {
                 /**
-                 * Need to change this so that all the aligning is done in the wall constructors and not here
+                 * Need to change this so that there's a map of letters to entities
+                 *
+                 * Also need to have the data for wall alignment in the wall class
                  */
                 if (map2dChars[j][i] == 'w') {
                     mapTiles[index(j, i)].entities.push_back(new Wall(north, j * tileSize, i * tileSize, tileSize));
