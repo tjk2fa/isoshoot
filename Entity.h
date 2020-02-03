@@ -45,8 +45,6 @@ public:
 
 struct Wall : Entity{
     direction dir;
-    const int wallSpriteWidth = 49;
-    const int wallSpriteHeight = 114;
     Wall(direction d, int x, int y, float tileSize);
 };
 

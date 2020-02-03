@@ -9,58 +9,79 @@
 
 
 Entity::Entity(int x, int y, float tileSize){
-    worldX = x;
-    worldY = y;
     texCoords = sf::IntRect();
 
     //std::cout << "entity at: " << x << y << std::endl;
     worldCoords = std::vector<sf::IntRect>();
     worldCoords.push_back(sf::IntRect(x+tileSize/2.f,y-tileSize/2.f,0,0));
+
 }
 
 
-//Really need to make this less crappy somehow
+
+/**Each if case contains the ent data for that direction of wall
+ * worldX,Y = world coords for rendering
+ * texCoords = location on sprite sheet
+ * worldCoords = vector of world-space bounding boxes for collision detection
+ */
+
+//need to make this less crappy
 Wall::Wall(direction d, int x, int y, float tileSize) : Entity(x, y, tileSize){
     dir = d;
-    if(d==north) {
-        //worldX = xthTile * tileSize,
-        //i * tileSize,
-        texCoords.left = (75 + 2 * wallSpriteWidth);
+
+    //west in map refers to north
+    //east refers to south
+    //north refers to east
+    //south refers to west
+
+
+    if(d==west) {
+        worldX = x*tileSize;
+        worldY = y*tileSize;
+        texCoords.left = 173;
         texCoords.top = 0;
-        texCoords.width = wallSpriteWidth;
-        texCoords.height = wallSpriteHeight;
+        texCoords.width = 49;
+        texCoords.height = 114;
         worldCoords[0].width += tileSize;
         worldCoords[0].height +=tileSize/3.f;
     }
-    else if(d==south) {
-        texCoords.left = (75 + wallSpriteWidth);
+    else if(d==east) {
+        worldX = x*tileSize + 2.f*tileSize/3.f;
+        worldY = y*tileSize;
+        texCoords.left = 124;
         texCoords.top = 0;
-        texCoords.width = wallSpriteWidth;
-        texCoords.height = wallSpriteHeight;
+        texCoords.width = 49;
+        texCoords.height = 114;
         worldCoords[0].top += tileSize*2.f/3.f;
         worldCoords[0].width = tileSize;
         worldCoords[0].height = tileSize/3.f;
 
     }
-    else if(d==east){
-        texCoords.left = (75+3*wallSpriteWidth);
+    else if(d==north){
+        worldX = x*tileSize + tileSize/3.f;
+        worldY = y*tileSize - tileSize/3.f;
+        texCoords.left = 222;
         texCoords.top = 0;
-        texCoords.width = wallSpriteWidth;
-        texCoords.height = wallSpriteHeight;
+        texCoords.width = 49;
+        texCoords.height = 114;
         worldCoords[0].left += tileSize*2.f/3.f;
         worldCoords[0].width += tileSize/3.f;
         worldCoords[0].height += tileSize;
 
     }
-    else if(d==west) {
+    else if(d==south) {
+        worldX = x*tileSize + tileSize/3.f;
+        worldY = y*tileSize + tileSize/3.f;
         texCoords.left = 75;
         texCoords.top = 0;
-        texCoords.width = wallSpriteWidth;
-        texCoords.height = wallSpriteHeight;
+        texCoords.width = 49;
+        texCoords.height = 114;
         worldCoords[0].width += tileSize/3.f;
         worldCoords[0].height += tileSize;
     }
     else if (d==southeast) {
+        worldX = x * tileSize+tileSize/3.f;
+        worldY = y*tileSize+tileSize/3.f;
         texCoords.left = 444;
         texCoords.top = 0;
         texCoords.width = 73;
@@ -76,6 +97,8 @@ Wall::Wall(direction d, int x, int y, float tileSize) : Entity(x, y, tileSize){
 
     }
     else if (d==northwest) {
+        worldX = x * tileSize;
+        worldY = y * tileSize;
         texCoords.left = 517;
         texCoords.top = 0;
         texCoords.width = 73;
@@ -88,6 +111,8 @@ Wall::Wall(direction d, int x, int y, float tileSize) : Entity(x, y, tileSize){
 
     }
     else if (d==southwest) {
+        worldX = x * tileSize;
+        worldY = y * tileSize;
         texCoords.left = 590;
         texCoords.top = 0;
         texCoords.width = 49;
@@ -100,6 +125,8 @@ Wall::Wall(direction d, int x, int y, float tileSize) : Entity(x, y, tileSize){
         worldCoords[1].height += tileSize;
     }
     else if (d==northeast){
+        worldX = x*tileSize+tileSize/3.f;
+        worldY = y*tileSize-tileSize/3.f;
         texCoords.left = 638;
         texCoords.top = 0;
         texCoords.width = 49;
@@ -120,6 +147,8 @@ Wall::Wall(direction d, int x, int y, float tileSize) : Entity(x, y, tileSize){
 
 activeEntity::activeEntity(activeEntType d, int x, int y, float tileSize) : Entity(x, y, tileSize) {
     if(d == player){
+        worldX = x*tileSize;
+        worldY = y*tileSize;
         texCoords.left = 0;
         texCoords.top = 39;
         texCoords.width = 70;
