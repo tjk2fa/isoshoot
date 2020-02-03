@@ -75,42 +75,27 @@ gameMap::gameMap(std::string filename, sf::Texture sheet){
      * Floor tiles aren't entities because their place in the draw order never needs to be updated
      *
      */
+    Entity* dummyFloorEnt = new Floor(0,0);
+
     int y = 0;
     for (int i = 0; i < size; i++) {
         for (int x = 0; x <= i; x++) {
             y = i - x;
             if (!mapTiles[index(x, y)].empty) {
-                sf::Vertex a = sf::Vertex(WorldToScreen(sf::Vector2f(x * tileSize, y * tileSize)));
-                sf::Vertex b = sf::Vertex(adjustVec(0, 39, a.position));
-                sf::Vertex c = sf::Vertex(adjustVec(75, 39, a.position));
-                sf::Vertex d = sf::Vertex(adjustVec(75, 0, a.position));
-                a.texCoords = sf::Vector2f(0,0);
-                b.texCoords = adjustVec(0, 39, a.texCoords);
-                c.texCoords = adjustVec(75, 39, a.texCoords);
-                d.texCoords = adjustVec(75, 0, a.texCoords);
-                floorVerticies.append(a);
-                floorVerticies.append(b);
-                floorVerticies.append(c);
-                floorVerticies.append(d);
+                dummyFloorEnt->worldX = tileSize*x;
+                dummyFloorEnt->worldY = tileSize*y;
+                loadEntityToVertexArray(floorVerticies, dummyFloorEnt);
             }
         }
     }
     for (int i = 0; i < size; i++) {
         y = size - 1;
         for (int x = i; x < size; x++) {
+
             if (!mapTiles[index(x, y)].empty) {
-                sf::Vertex a = sf::Vertex(WorldToScreen(sf::Vector2f(x * tileSize, y * tileSize)));
-                sf::Vertex b = sf::Vertex(adjustVec(0, 39, a.position));
-                sf::Vertex c = sf::Vertex(adjustVec(75, 39, a.position));
-                sf::Vertex d = sf::Vertex(adjustVec(75, 0, a.position));
-                a.texCoords = sf::Vector2f(0,0);
-                b.texCoords = adjustVec(0, 39, a.texCoords);
-                c.texCoords = adjustVec(75, 39, a.texCoords);
-                d.texCoords = adjustVec(75, 0, a.texCoords);
-                floorVerticies.append(a);
-                floorVerticies.append(b);
-                floorVerticies.append(c);
-                floorVerticies.append(d);
+                dummyFloorEnt->worldX = tileSize*x;
+                dummyFloorEnt->worldY = tileSize*y;
+                loadEntityToVertexArray(floorVerticies, dummyFloorEnt);
             }
             y--;
         }

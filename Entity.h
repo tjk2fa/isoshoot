@@ -38,7 +38,7 @@ public:
     std::vector<sf::IntRect> worldCoords; //vector of rectangles for collisions
     sf::IntRect texCoords; //where the ent is on the sprite sheet
 
-
+    Entity();
     Entity(int x, int y, float tileSize);
 
 };
@@ -46,6 +46,10 @@ public:
 struct Wall : Entity{
     direction dir;
     Wall(direction d, int x, int y, float tileSize);
+};
+
+struct Floor : Entity{
+    Floor(int x, int y);
 };
 
 

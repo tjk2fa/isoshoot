@@ -10,3 +10,4 @@ include_directories("/opt/local/include")
 target_link_libraries(game "/opt/local/lib/libsfml-graphics.dylib")
 target_link_libraries(game "/opt/local/lib/libsfml-window.dylib")
 target_link_libraries(game "/opt/local/lib/libsfml-system.dylib")
+

@@ -8,16 +8,19 @@
 
 
 
-Entity::Entity(int x, int y, float tileSize){
+Entity::Entity(){
     texCoords = sf::IntRect();
-
-    //std::cout << "entity at: " << x << y << std::endl;
-    worldCoords = std::vector<sf::IntRect>();
-    worldCoords.push_back(sf::IntRect(x+tileSize/2.f,y-tileSize/2.f,0,0));
-
 }
 
 
+
+Floor::Floor(int x, int y){
+    zHeight = 0;
+    texCoords.top = 0;
+    texCoords.left = 0;
+    texCoords.height = 39;
+    texCoords.width = 75;
+}
 
 /**Each if case contains the ent data for that direction of wall
  * worldX,Y = world coords for rendering
@@ -26,8 +29,10 @@ Entity::Entity(int x, int y, float tileSize){
  */
 
 //need to make this less crappy
-Wall::Wall(direction d, int x, int y, float tileSize) : Entity(x, y, tileSize){
+Wall::Wall(direction d, int x, int y, float tileSize) : Entity(){
     dir = d;
+    worldCoords = std::vector<sf::IntRect>();
+    worldCoords.push_back(sf::IntRect(x*tileSize+tileSize/2.f,y*tileSize-tileSize/2.f,0,0));
 
     //west in map refers to north
     //east refers to south
@@ -145,7 +150,9 @@ Wall::Wall(direction d, int x, int y, float tileSize) : Entity(x, y, tileSize){
     zHeight = 90;
 }
 
-activeEntity::activeEntity(activeEntType d, int x, int y, float tileSize) : Entity(x, y, tileSize) {
+activeEntity::activeEntity(activeEntType d, int x, int y, float tileSize) : Entity() {
+    worldCoords = std::vector<sf::IntRect>();
+    worldCoords.push_back(sf::IntRect(x*tileSize+tileSize/2.f,y*tileSize-tileSize/2.f,0,0));
     if(d == player){
         worldX = x*tileSize;
         worldY = y*tileSize;
